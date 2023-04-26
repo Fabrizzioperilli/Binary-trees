@@ -17,10 +17,11 @@ template <class Key>
 class AB
 {
 private:
-  int branchSize_(NodeB<Key> *) const; 
-  int heightN_(NodeB<Key> *) const; 
-  bool isBranchEquilibrium_(NodeB<Key> *) const; 
+  int branchSize_(NodeB<Key> *) const;
+  int heightN_(NodeB<Key> *) const;
+  bool isBranchEquilibrium_(NodeB<Key> *) const;
   void prune_(NodeB<Key> *&);
+  void route_(NodeB<Key> *) const;
 
 protected:
   NodeB<Key> *root_;
@@ -36,12 +37,12 @@ public:
   inline bool isEquilibrium() const;
 
   virtual void insert(const Key &) = 0;
-  // virtual bool search(const Key &) = 0;
-  //void inorden() const;
+  virtual bool search(const Key &) const = 0;
+  void inorden() const;
+
   template <class T>
   friend std::ostream &operator<<(std::ostream &, const AB<T> &);
 };
-
 
 /**
  * @brief Construct a new AB<Key>::AB object
@@ -205,6 +206,22 @@ bool AB<Key>::isEquilibrium() const
   return isBranchEquilibrium_(root_);
 }
 
+template <class Key>
+void AB<Key>::inorden() const
+{
+ route_(root_); 
+}
+
+template <class Key>
+void AB<Key>::route_(NodeB<Key> *node) const
+{
+  if (node == NULL)
+    return;
+  route_(node->getLeft());
+  std::cout << node->getData() << " ";
+  route_(node->getRight());
+}
+
 /**
  * @brief This method print the tree
  *
@@ -214,26 +231,32 @@ bool AB<Key>::isEquilibrium() const
  * @return std::ostream&
  */
 template <class Key>
-std::ostream& operator<<(std::ostream& os, const AB<Key>& ab_tree) {
-  std::queue<std::pair<NodeB<Key>*, int>> queue;
+std::ostream &operator<<(std::ostream &os, const AB<Key> &ab_tree)
+{
+  std::queue<std::pair<NodeB<Key> *, int>> queue;
   queue.push(std::make_pair(ab_tree.root_, 0));
   int current_level = 0;
-  
+
   std::cout << "Level " << current_level << ": ";
-  while (!queue.empty()) {
-    std::pair<NodeB<Key>*, int> node_current = queue.front();
+  while (!queue.empty())
+  {
+    std::pair<NodeB<Key> *, int> node_current = queue.front();
     queue.pop();
 
-    if (node_current.second > current_level) {
+    if (node_current.second > current_level)
+    {
       current_level++;
       os << "\nLevel " << current_level << ": ";
     }
 
-    if (node_current.first != NULL) {
+    if (node_current.first != NULL)
+    {
       os << "[" << *node_current.first << "] ";
       queue.push(std::make_pair(node_current.first->getLeft(), current_level + 1));
       queue.push(std::make_pair(node_current.first->getRight(), current_level + 1));
-    } else {
+    }
+    else
+    {
       os << "[.] ";
     }
   }

@@ -17,12 +17,13 @@ class ABB : public AB<Key>
 {
 private:
   void insertBranch_(NodeB<Key> *&, const Key &);
+  bool searchBranch_(NodeB<Key> *, const Key &) const;
 
 public:
   ABB();
   ~ABB();
   void insert(const Key &) override;
-  // virtual bool search(const Key&)const override;
+  virtual bool search(const Key &) const override;
 };
 
 /**
@@ -32,20 +33,6 @@ public:
  */
 template <class Key>
 ABB<Key>::ABB() : AB<Key>() {}
-
-/**
- * @brief Destroy the ABB<Key>::ABB object
- *
- * @tparam Key
- */
-template <class Key>
-ABB<Key>::~ABB() {}
-
-template <class Key>
-void ABB<Key>::insert(const Key &key)
-{
-  insertBranch_(this->root_, key);
-}
 
 /**
  * @brief Insert a node in the branch tree
@@ -63,4 +50,54 @@ void ABB<Key>::insertBranch_(NodeB<Key> *&node, const Key &key)
     insertBranch_(node->getLeft(), key);
   else
     insertBranch_(node->getRight(), key);
+}
+
+/**
+ * @brief Destroy the ABB<Key>::ABB object
+ *
+ * @tparam Key
+ */
+template <class Key>
+ABB<Key>::~ABB() {}
+
+template <class Key>
+void ABB<Key>::insert(const Key &key)
+{
+  insertBranch_(this->root_, key);
+}
+
+/**
+ * @brief Search a node in the branch tree
+ *
+ * @tparam Key
+ * @param node
+ * @param key
+ * @return true
+ * @return false
+ */
+template <class Key>
+bool ABB<Key>::searchBranch_(NodeB<Key> *node, const Key &key) const
+{
+  if (node == NULL)
+    return false;
+  else if (key == node->getData())
+    return true;
+  else if (key < node->getData())
+    return searchBranch_(node->getLeft(), key);
+  else
+    return searchBranch_(node->getRight(), key);
+}
+
+/**
+ * @brief Search a node in the branch tree
+ *
+ * @tparam Key
+ * @param key
+ * @return true
+ * @return false
+ */
+template <class Key>
+bool ABB<Key>::search(const Key &key) const
+{
+  return searchBranch_(this->root_, key);
 }

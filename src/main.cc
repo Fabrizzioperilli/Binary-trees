@@ -20,23 +20,25 @@ int main()
     do
     {
         std::cout << "---Binary Trees---" << std::endl;
-        std::cout << "Choose type of tree do you want use" << std::endl;
+        std::cout << "Choose type of tree do you want to use" << std::endl;
         std::cout << "[1] Search binary tree (ABB)" << std::endl;
         std::cout << "[2] Balanced binary search tree (AVL)" << std::endl;
         std::cout << "Option: ";
         std::cin >> tree_option;
-        
-        if (tree_option == 1) {
-            std::cout << "ABB" << std::endl; 
+
+        if (tree_option == 1)
+        {
+            std::cout << "You have selected ABB";
             tree = new ABB<long>();
         }
-        else if (tree_option == 2) {
-            std::cout << "AVL" << std::endl; 
+        else if (tree_option == 2)
+        {
+            std::cout << "AVL" << std::endl;
             // tree = new AVL<long>();
         }
         else
-            std::cout << "Invalid option, enter option again" << std::endl; 
-    }while (tree_option != 1 && tree_option != 2);
+            std::cout << "Invalid option, enter option again" << std::endl;
+    } while (tree_option != 1 && tree_option != 2);
 
     std::cout << std::endl;
 
@@ -50,27 +52,34 @@ int main()
         std::cout << "Option: ";
         std::cin >> menu_option;
 
+        long user_key;
         switch (menu_option)
         {
         case 1:
-            long user_key;
-            std::cout << "Enter key: " ;
-            std::cin >> user_key; 
+            std::cout << "Enter key: ";
+            std::cin >> user_key;
             tree->insert(user_key);
             std::cout << "\nTree: " << std::endl;
             std::cout << *tree << std::endl;
             break;
         case 2:
-            std::cout << "Search key" << std::endl;
+            std::cout << "Enter key to search: ";
+            std::cin >> user_key;
+            if (tree->search(user_key))
+                std::cout << "Key found" << std::endl;
+            else
+                std::cout << "Key not found" << std::endl;
             break;
         case 3:
-            std::cout << "Show tree inorden" << std::endl;
+            std::cout << "\nInorder Tree" << std::endl;
+            tree->inorden();
+            std::cout << std::endl;
             break;
         case 0:
             exit(EXIT_SUCCESS);
             break;
         default:
-            std::cout << "Invalid option, enter option again" << std::endl; 
+            std::cout << "Invalid option, enter option again" << std::endl;
             break;
         }
     } while (menu_option != 0);
