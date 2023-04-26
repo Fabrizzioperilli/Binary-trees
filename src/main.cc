@@ -10,11 +10,13 @@
  */
 
 #include <iostream>
+#include "../include/AB.h"
+#include "../include/ABB.h"
 
 int main()
 {
     int tree_option;
-    //AB<long> *tree;
+    AB<long> *tree;
     do
     {
         std::cout << "---Binary Trees---" << std::endl;
@@ -24,12 +26,14 @@ int main()
         std::cout << "Option: ";
         std::cin >> tree_option;
         
-        if (tree_option == 1) 
+        if (tree_option == 1) {
             std::cout << "ABB" << std::endl; 
-            //tree = new ABB<long>();
-        else if (tree_option == 2)
+            tree = new ABB<long>();
+        }
+        else if (tree_option == 2) {
             std::cout << "AVL" << std::endl; 
-            //tree = new AVL<long>();
+            // tree = new AVL<long>();
+        }
         else
             std::cout << "Invalid option, enter option again" << std::endl; 
     }while (tree_option != 1 && tree_option != 2);
@@ -39,7 +43,7 @@ int main()
     int menu_option;
     do
     {
-        std::cout << "[1] Insert key" << std::endl;
+        std::cout << "\n[1] Insert key" << std::endl;
         std::cout << "[2] Search key" << std::endl;
         std::cout << "[3] Show tree inorden" << std::endl;
         std::cout << "[0] Exit" << std::endl;
@@ -49,7 +53,12 @@ int main()
         switch (menu_option)
         {
         case 1:
-            std::cout << "Insert key" << std::endl;
+            long user_key;
+            std::cout << "Enter key: " ;
+            std::cin >> user_key; 
+            tree->insert(user_key);
+            std::cout << "\nTree: " << std::endl;
+            std::cout << *tree << std::endl;
             break;
         case 2:
             std::cout << "Search key" << std::endl;

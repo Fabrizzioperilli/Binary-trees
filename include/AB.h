@@ -8,32 +8,40 @@
  * @copyright Copyright (c) 2023
  *
  */
-
+#pragma once
 #include "NodeB.h"
+#include <iostream>
+#include <queue>
 
 template <class Key>
 class AB
 {
 private:
+  int branchSize_(NodeB<Key> *) const; 
+  int heightN_(NodeB<Key> *) const; 
+  bool isBranchEquilibrium_(NodeB<Key> *) const; 
+  void prune_(NodeB<Key> *&);
+
+protected:
   NodeB<Key> *root_;
-  const int branchSize(NodeB<Key> *);
-  const int heightN(NodeB<Key> *);
-  const bool isBranchEquilibrium(NodeB<Key> *);
 
 public:
   AB();
-  ~AB();
+  virtual ~AB();
 
-  void prune(NodeB<Key> *&);
   bool isEmpty(NodeB<Key> *);
   bool isLeafNode(NodeB<Key> *);
-  inline const int size();
-  inline const int height();
-  inline const bool isEquilibrium();
+  inline int size() const;
+  inline int height() const;
+  inline bool isEquilibrium() const;
 
-  virtual bool insert(const Key &) = 0;
-  virtual bool search(const Key &) = 0;
+  virtual void insert(const Key &) = 0;
+  // virtual bool search(const Key &) = 0;
+  //void inorden() const;
+  template <class T>
+  friend std::ostream &operator<<(std::ostream &, const AB<T> &);
 };
+
 
 /**
  * @brief Construct a new AB<Key>::AB object
@@ -51,7 +59,7 @@ AB<Key>::AB() : root_(NULL) {}
 template <class Key>
 AB<Key>::~AB()
 {
-  prune(root_);
+  prune_(root_);
 }
 
 /**
@@ -61,12 +69,12 @@ AB<Key>::~AB()
  * @param node
  */
 template <class Key>
-void AB<Key>::prune(NodeB<Key> *&node)
+void AB<Key>::prune_(NodeB<Key> *&node)
 {
   if (node == NULL)
     return;
-  prune(node->left_);
-  prune(node->right_);
+  prune_(node->getLeft());
+  prune_(node->getRight());
   delete node;
   node = NULL;
 }
@@ -96,7 +104,7 @@ bool AB<Key>::isEmpty(NodeB<Key> *node)
 template <class Key>
 bool AB<Key>::isLeafNode(NodeB<Key> *node)
 {
-  return !node->left_ && !node->right_;
+  return !node->getLeft() && !node->getRight();
 }
 
 /**
@@ -107,11 +115,11 @@ bool AB<Key>::isLeafNode(NodeB<Key> *node)
  * @return const int
  */
 template <class Key>
-const int AB<Key>::branchSize(NodeB<Key> *node)
+int AB<Key>::branchSize_(NodeB<Key> *node) const
 {
   if (node == NULL)
     return 0;
-  return (1 + branchSize(node->left_) + branchSize(node->right_));
+  return (1 + branchSize_(node->getLeft) + branchSize_(node->getRight()));
 }
 
 /**
@@ -121,9 +129,9 @@ const int AB<Key>::branchSize(NodeB<Key> *node)
  * @return const int
  */
 template <class Key>
-const int AB<Key>::size()
+int AB<Key>::size() const
 {
-  return branchSize(root_);
+  return branchSize_(root_);
 }
 
 /**
@@ -134,12 +142,12 @@ const int AB<Key>::size()
  * @return const int
  */
 template <class Key>
-const int AB<Key>::heightN(NodeB<Key> *node)
+int AB<Key>::heightN_(NodeB<Key> *node) const
 {
   if (node == NULL)
     return 0;
-  int height_left = heightN(node->left_);
-  int height_right = heightN(node->right_);
+  int height_left = heightN_(node->getLeft());
+  int height_right = heightN_(node->getRight());
 
   if (height_right > height_left)
     return ++height_right;
@@ -154,9 +162,9 @@ const int AB<Key>::heightN(NodeB<Key> *node)
  * @return const int
  */
 template <class Key>
-const int AB<Key>::height()
+int AB<Key>::height() const
 {
-  return heightN(root_);
+  return heightN_(root_);
 }
 
 /**
@@ -168,17 +176,17 @@ const int AB<Key>::height()
  * @return false
  */
 template <class Key>
-const bool AB<Key>::isBranchEquilibrium(NodeB<Key> *node)
+bool AB<Key>::isBranchEquilibrium_(NodeB<Key> *node) const
 {
   if (node == NULL)
     return true;
-  const int eq = branchSize(node->left_) - branchSize(node->right_);
+  const int eq = branchSize_(node->getLeft()) - branchSize_(node->getRight());
   switch (eq)
   {
   case -1:
   case 0:
   case 1:
-    return isBranchEquilibrium(node->left_) && isBranchEquilibrium(node->right_);
+    return isBranchEquilibrium_(node->getLeft()) && isBranchEquilibrium_(node->getRight());
   default:
     return false;
   }
@@ -192,7 +200,43 @@ const bool AB<Key>::isBranchEquilibrium(NodeB<Key> *node)
  * @return false
  */
 template <class Key>
-const bool AB<Key>::isEquilibrium()
+bool AB<Key>::isEquilibrium() const
 {
-  return isBranchEquilibrium(root_);
+  return isBranchEquilibrium_(root_);
+}
+
+/**
+ * @brief This method print the tree
+ *
+ * @tparam Key
+ * @param os
+ * @param ab_tree
+ * @return std::ostream&
+ */
+template <class Key>
+std::ostream& operator<<(std::ostream& os, const AB<Key>& ab_tree) {
+  std::queue<std::pair<NodeB<Key>*, int>> queue;
+  queue.push(std::make_pair(ab_tree.root_, 0));
+  int current_level = 0;
+  
+  std::cout << "Level " << current_level << ": ";
+  while (!queue.empty()) {
+    std::pair<NodeB<Key>*, int> node_current = queue.front();
+    queue.pop();
+
+    if (node_current.second > current_level) {
+      current_level++;
+      os << "\nLevel " << current_level << ": ";
+    }
+
+    if (node_current.first != NULL) {
+      os << "[" << *node_current.first << "] ";
+      queue.push(std::make_pair(node_current.first->getLeft(), current_level + 1));
+      queue.push(std::make_pair(node_current.first->getRight(), current_level + 1));
+    } else {
+      os << "[.] ";
+    }
+  }
+
+  return os;
 }
