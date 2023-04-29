@@ -12,6 +12,7 @@
 #include <iostream>
 #include "../include/AB.h"
 #include "../include/ABB.h"
+#include "../include/AVL.h"
 
 int main()
 {
@@ -34,7 +35,7 @@ int main()
         else if (tree_option == 2)
         {
             std::cout << "AVL" << std::endl;
-            // tree = new AVL<long>();
+            tree = new AVL<long>();
         }
         else
             std::cout << "Invalid option, enter option again" << std::endl;

@@ -11,7 +11,6 @@
 #pragma once
 #include <iostream>
 
-
 template <class Key>
 class NodeB
 {
@@ -24,7 +23,7 @@ protected:
 
 public:
   NodeB(const Key &, NodeB<Key> * = NULL, NodeB<Key> * = NULL);
-  ~NodeB();
+  virtual ~NodeB();
 
   inline Key getData() const;
 
@@ -33,11 +32,10 @@ public:
 
   inline NodeB<Key> *getRight() const;
   inline NodeB<Key> *&getRight();
-  
-  template <class T>
-  friend std::ostream &operator<< (std::ostream &, const NodeB<T> &);
-};
 
+  template <class T>
+  friend std::ostream &operator<<(std::ostream &, const NodeB<T> &);
+};
 
 /**
  * @brief Construct a new Node B< Key>:: Node B object
@@ -81,7 +79,6 @@ NodeB<Key> *NodeB<Key>::getLeft() const
 {
   return left_;
 }
-
 
 /**
  * @brief Return the left node

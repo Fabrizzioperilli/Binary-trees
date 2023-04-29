@@ -209,7 +209,7 @@ bool AB<Key>::isEquilibrium() const
 template <class Key>
 void AB<Key>::inorden() const
 {
- route_(root_); 
+  route_(root_);
 }
 
 template <class Key>
