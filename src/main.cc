@@ -34,7 +34,7 @@ int main()
         }
         else if (tree_option == 2)
         {
-            std::cout << "AVL" << std::endl;
+            std::cout << "You have selected AVL";
             tree = new AVL<long>();
         }
         else

@@ -97,6 +97,12 @@ void AVL<Key>::insert(const Key &key)
 template <class Key>
 void AVL<Key>::rotationLL_(NodeAVL<Key> *&node)
 {
+  #ifdef TRACE
+  std::cout << "\nUnbalance" << std::endl;
+  std::cout << *this << std::endl;
+  std::cout << "\nRotation Left-Left in [" << node->getData() << "]" << std::endl;
+  #endif
+
   NodeAVL<Key> *node1 = node->getLeftAVL();
   node->getLeftAVL() = node1->getRightAVL();
   node1->getRightAVL() = node;
@@ -123,6 +129,12 @@ void AVL<Key>::rotationLL_(NodeAVL<Key> *&node)
 template <class Key>
 void AVL<Key>::rotationRR_(NodeAVL<Key> *&node)
 {
+  #ifdef TRACE
+  std::cout << "\nUnbalance" << std::endl;
+  std::cout << *this << std::endl;
+  std::cout << "\nRotation Right-Right in [" << node->getData() << "]" << std::endl;
+  #endif
+
   NodeAVL<Key> *node1 = node->getRightAVL();
   node->getRightAVL() = node1->getLeftAVL();
   node1->getLeftAVL() = node;
@@ -149,6 +161,12 @@ void AVL<Key>::rotationRR_(NodeAVL<Key> *&node)
 template <class Key>
 void AVL<Key>::rotationLR_(NodeAVL<Key> *&node)
 {
+  #ifdef TRACE
+  std::cout << "\nUnbalance" << std::endl;
+  std::cout << *this << std::endl;
+  std::cout << "\nRotation Left-Right in [" << node->getData() << "]" << std::endl;
+  #endif
+  
   NodeAVL<Key> *node1 = node->getLeftAVL();
   NodeAVL<Key> *node2 = node1->getRightAVL();
   node->getLeftAVL() = node2->getRightAVL();
@@ -185,6 +203,12 @@ void AVL<Key>::rotationLR_(NodeAVL<Key> *&node)
 template <class Key>
 void AVL<Key>::rotationRL_(NodeAVL<Key> *&node)
 {
+  #ifdef TRACE
+  std::cout << "\nUnbalance" << std::endl;
+  std::cout << *this << std::endl;
+  std::cout << "\nRotation Right-Left in [" << node->getData() << "]" << std::endl;
+  #endif
+
   NodeAVL<Key> *node1 = node->getRightAVL();
   NodeAVL<Key> *node2 = node1->getLeftAVL();
   node->getRightAVL() = node2->getLeftAVL();
