@@ -48,7 +48,8 @@ int main()
     {
         std::cout << "\n[1] Insert key" << std::endl;
         std::cout << "[2] Search key" << std::endl;
-        std::cout << "[3] Show tree inorden" << std::endl;
+        std::cout << "[3] Show tree inorder" << std::endl;
+        std::cout << "[4] Show tree preorder" << std::endl;
         std::cout << "[0] Exit" << std::endl;
         std::cout << "Option: ";
         std::cin >> menu_option;
@@ -74,6 +75,11 @@ int main()
         case 3:
             std::cout << "\nInorder Tree" << std::endl;
             tree->inorden();
+            std::cout << std::endl;
+            break;
+        case 4:
+            std::cout << "\nPreorder Tree" << std::endl;
+            tree->preorden();
             std::cout << std::endl;
             break;
         case 0:

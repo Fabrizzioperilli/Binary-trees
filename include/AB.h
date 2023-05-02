@@ -21,7 +21,8 @@ private:
   int heightN_(NodeB<Key> *) const;
   bool isBranchEquilibrium_(NodeB<Key> *) const;
   void prune_(NodeB<Key> *&);
-  void route_(NodeB<Key> *) const;
+  void routeInorden_(NodeB<Key> *) const;
+  void routePreorden_(NodeB<Key> *) const;
 
 protected:
   NodeB<Key> *root_;
@@ -38,7 +39,9 @@ public:
 
   virtual void insert(const Key &) = 0;
   virtual bool search(const Key &) const = 0;
+  
   void inorden() const;
+  void preorden() const;
 
   template <class T>
   friend std::ostream &operator<<(std::ostream &, const AB<T> &);
@@ -206,20 +209,58 @@ bool AB<Key>::isEquilibrium() const
   return isBranchEquilibrium_(root_);
 }
 
+/**
+ * @brief Trace inorden of tree
+ * 
+ * @tparam Key 
+ */
 template <class Key>
 void AB<Key>::inorden() const
 {
-  route_(root_);
+  routeInorden_(root_);
 }
 
+/**
+ * @brief Trace inorden of tree
+ * 
+ * @tparam Key 
+ */
 template <class Key>
-void AB<Key>::route_(NodeB<Key> *node) const
+void AB<Key>::preorden() const
+{
+  routePreorden_(root_);
+}
+
+/**
+ * @brief Inorden route of the tree
+ * 
+ * @tparam Key 
+ * @param node 
+ */
+template <class Key>
+void AB<Key>::routeInorden_(NodeB<Key> *node) const
 {
   if (node == NULL)
     return;
-  route_(node->getLeft());
+  routeInorden_(node->getLeft());
   std::cout << node->getData() << " ";
-  route_(node->getRight());
+  routeInorden_(node->getRight());
+}
+
+/**
+ * @brief Preorden route of the tree 
+ * 
+ * @tparam Key 
+ * @param node 
+ */
+template <class Key>
+void AB<Key>::routePreorden_(NodeB<Key> *node) const
+{
+  if (node == NULL)
+    return;
+  std::cout << node->getData() << " ";
+  routePreorden_(node->getLeft());
+  routePreorden_(node->getRight());
 }
 
 /**
